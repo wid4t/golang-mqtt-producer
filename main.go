@@ -11,6 +11,7 @@ import (
 
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 var (
@@ -19,8 +20,6 @@ var (
 )
 
 func main() {
-
-	app := fiber.New()
 
 	mqttOpts := MQTT.NewClientOptions()
 	mqttOpts.AddBroker(mqttBroker)
@@ -42,7 +41,11 @@ func main() {
 
 	defer mqttClient.Disconnect(250)
 
-	app.Get("/api/mqtt/send", func(c *fiber.Ctx) error {
+	app := fiber.New()
+
+	api := app.Group("/module/mqtt", logger.New())
+
+	api.Get("/send", func(c *fiber.Ctx) error {
 
 		message := c.Query("message")
 		token := mqttClient.Publish("topic", 1, false, message)
