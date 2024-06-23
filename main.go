@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	mqttBroker   = "mqtts://mosquitto-service.server.svc.cluster.local:8883"
+	mqttBroker   = "mqtts://mosquitto-nodeport.server.svc.cluster.local:8883"
 	mqttClientID = "go-mqtt-producer"
 )
 
