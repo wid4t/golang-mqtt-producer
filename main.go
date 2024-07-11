@@ -43,7 +43,16 @@ func main() {
 
 	app := fiber.New()
 
-	api := app.Group("/module/mqtt", logger.New())
+	api := app.Group("/module/mqtt", logger.New(logger.Config{
+		Next:          nil,
+		Done:          nil,
+		Format:        "${time} | ${status} | ${latency} | ${reqHeader:X-REAL-IP} | ${method} | ${path} | ${error}\n",
+		TimeFormat:    "15:04:05",
+		TimeZone:      "Local",
+		TimeInterval:  500 * time.Millisecond,
+		Output:        os.Stdout,
+		DisableColors: false,
+	}))
 
 	api.Get("/send", func(c *fiber.Ctx) error {
 
